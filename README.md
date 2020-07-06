@@ -1,2 +1,3 @@
-# picsfy-activos_fotogr-ficos
+# picsfy-activos_fotograficos
 Proyecto final bootcamp HAB
+
