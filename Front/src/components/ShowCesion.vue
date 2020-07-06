@@ -1,0 +1,227 @@
+<template>
+  <div>
+      <div class="articulo" v-show="verArticulos">
+         <h3>
+          {{articulo.nombre_articulo}}
+        </h3>
+        <img :src="articulo.imagen" alt="imagen articulo">
+       
+        <p>
+          {{articulo.descripcion}}
+        </p>
+        <p> Precio: 
+          {{articulo.precio}}€
+        </p>
+        <p>
+          Disponible {{articulo.fecha_fin | moment(" DD-MM-YYYY")}}
+        </p>
+        <br>
+        <button @click="openModal()">Comprar</button> 
+        <br>
+        <div v-show="modal" class="modal">
+          <div class="modalBox">
+            <h2> ❓ Reserva producto</h2>
+            <h3>Para finalizar tu compra para adquirir un derecho de imagen basta con añadir la fecha de inicio y
+              la fecha final el mismo dia de la adquisición así como tu dirección.
+            </h3>
+            <h3>Cuando finalices la compra recibirás un mail de confirmación.</h3>
+            <h2> ❗️ Recuerda</h2>
+            <h3>Una vez aquieras un producto podrás verlo en la seccion de <b>"Mi perfil >
+              articulos adquiridos"</b> así como valorar tu experiencia. 
+            </h3>
+            <h3>Gracias por confiar en nosotros y esperamos hayas tenido buena experiencia  😀</h3>
+          
+            <form class="formCompra"> 
+                 <label for="fecha_inicio"> Fecha Inicio:</label>
+                 <br>
+                 <input type="date" id="fecha_inicio" name="fecha_inicio" v-model="datosCompra.fecha_inicio" />
+                 <br>
+                 <br>
+                 <label for="fecha_fin"> Fecha Fin:</label>
+                 <br>
+                 <input type="date" id="fecha_fin" name="fecha_fin" v-model="datosCompra.fecha_fin" />
+                 <br>
+                  <br>
+                 <label for="direccion"> Dirección:</label>
+                 <br>
+                 <input type="text" id="direccion" name="direccion" v-model="datosCompra.direccion" />
+                 <br>
+                  <br>
+                 </form>
+                 <button @click="buyProductEvent(articulo)">Comprar</button>
+                 <button class="voltar" @click="closeModal()">Cerrar</button>
+          </div>
+        </div>
+        <br>
+      </div>
+<!-- VER ARTICULOS ECOMMERCE Y PRODUCTOS -->
+    <div class="ecommerce_productos"
+          v-show="!verArticulos">  
+          <h2>E-COMMERCE Y PRODUCTO</h2>
+      <div 
+           v-for="(ecommerce_producto, index) in ecommerce_productos" 
+           :key="ecommerce_producto.id">
+        <img :src="ecommerce_producto.imagen" alt="foto ecommerce y producto" 
+        @click="mostrarArticuloEvent(index)">
+      </div>
+    </div>
+<!-- VER ARTICULOS BODAS Y EVENTOS -->
+        <div 
+          v-show="!verArticulos">  
+          <h2>BODAS Y EVENTOS</h2>
+      <div class="Bodas y eventos" 
+           v-for="(bodas_eventos, index) in bodas_eventoss" 
+           :key="bodas_eventos.tittle">
+        <img :src="bodas_eventos.imagen" alt="foto bodas y eventos" 
+        @click="mostrarBodasEvent(index)">
+      </div>
+    </div>
+<!-- VER ARTICULOS RETRATO Y NATURALEZA -->
+      <div 
+          v-show="!verArticulos">  
+          <h2>RETRATO Y NATURALEZA</h2>
+      <div class="Retrato" 
+           v-for="(retrato_naturaleza, index) in retrato_naturalezas" 
+           :key="retrato_naturaleza.tittle">
+        <img :src="retrato_naturaleza.imagen" alt="foto retrato y naturaleza" 
+        @click="mostrarImagenEvent(index)">
+      </div>
+    </div>
+    <br>
+    <button class="vol"><router-link :to="{ name:'Products'}"> Volver al menú</router-link></button>    
+  </div>
+</template>
+
+<script>
+import Swal from "sweetalert2";
+import VModal from "vue-js-modal";
+import formatDateToDB from "@/aux/helpers.js"
+export default {
+name: 'listaproductos',
+props:{
+    ecommerce_productos: Array,
+    articulo: Object,
+    bodas_eventoss: Array,
+    retrato_naturalezas: Array,
+    verArticulos: Boolean,
+    id: Number,
+    comprar: Array, 
+    datosCompra: Object,
+}, 
+data(){
+  return {
+    modal:false,
+  }
+},
+methods: {
+  mostrarArticuloEvent(index) {
+      let data = this.ecommerce_productos[index].id;
+      this.$emit("go", data);
+    },
+  mostrarBodasEvent(index) {
+      let data = this.bodas_eventoss[index].id;
+      this.$emit("go", data);
+    },
+  mostrarImagenEvent(index) {
+      let data = this.retrato_naturalezas[index].id;
+      this.$emit("go", data);
+    },
+  verArticuloEvent() {
+      this.$emit("verArticulo");
+    },
+  openModal() {
+    this.modal = true;
+
+  },
+  closeModal() {
+    this.modal = false;
+
+  },
+  buyProductEvent(articulo) {
+    let data = articulo.id
+    this.$emit("comprar", data);
+  }
+}
+}
+
+</script>
+
+<style scoped>
+div{
+display: inline-block;
+}
+.modal {
+position: fixed;
+top: 5;
+left: 0;
+right: 0;
+bottom: 0;
+background: rgba(0, 0, 0, 0.5);
+width: 100%;
+padding-bottom: 2rem;
+}
+
+.modalBox {
+background: black;
+margin: 1rem;
+padding:100px;
+border: 1px solid rgb(48, 175, 97);
+border-radius: 13px;
+width: 80%;
+}
+
+.modalBox button{
+  margin: 1rem;
+}
+
+.modalBox h2{
+color: rgb(48, 175, 97);
+}
+.formCompra{
+  background: rgba(172, 159, 147, 0.294);
+  border-radius: 20px;
+  padding: 2.5rem;
+  margin: 0 30rem;
+  border: 1px solid rgba(255, 255, 255, 0.616);
+}
+img {
+  position: relative;
+  display: block;
+  transition: transform 700ms;
+  border: 1px solid rgba(0, 0, 0, 0.226);
+  border-radius: 5px;
+  cursor: pointer
+}
+
+div img:focus,
+div img:hover {
+  transform: scale(1.3);
+  z-index: 1;
+}
+.articulo{
+  background: rgba(218, 218, 218, 0.192);
+  padding: 1rem 10rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.294);
+
+}
+h2{
+  letter-spacing: 10px;
+  text-align: left;
+  margin-left: 6rem;  
+  display: flex; 
+}
+
+router-link{
+  text-decoration: none;
+}
+a{
+  color: white;
+}
+.vol{
+  margin-top: 2rem;
+}
+.articulo h3{
+  color: orange;
+}
+</style>
