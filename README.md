@@ -1,7 +1,8 @@
-# picsfy-activos_fotograficos
-Proyecto final bootcamp HAB
+# picsfy
 
-Activos fotográficos
+  Proyecto completo 
+          [BBDD(MySQL),
+           Backend(API propia con Node),
+           Front(Vue)];
 
-Plataforma web donde los usuarios tendrán a su disposición un catálogo donde podrán arrendar o alquilar equipos fotograficos (camaras, drones y accesorios), además de adquirir o ceder derechos de imagen según categoría específica (e-commerce, eventos, retrato, etc..)
-
+  (MVP) Market para alquiler de equipo fotográfico y cesión de derechos de imagen. Enfocado al fotograd@ amateur 
